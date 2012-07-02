@@ -191,7 +191,7 @@ of the library.
 A few additional resources:
 
 * https://github.com/jquery/learn.jquery.com
-** https://github.com/jquery/learn.jquery.com/blob/master/content/using-jquery-core/jquery-object.md
+* https://github.com/jquery/learn.jquery.com/blob/master/content/using-jquery-core/jquery-object.md
 * https://github.com/jquery/jquery/blob/master/src/core.js
-* http://james.padolsey.com/jquery/ jQuery source viewer
+* http://james.padolsey.com/jquery/
 * http://zeptojs.com/
