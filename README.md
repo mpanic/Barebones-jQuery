@@ -15,9 +15,11 @@ the code into five parts and examine them.
 First, we define the main jQuery() function. It simply passes its parameter
 to the jQuery.prototype.init() method, which does the actual processing.
 
-    var jQuery = function(selector) {
-        return new jQuery.prototype.init(selector);
-    };
+```js
+var jQuery = function(selector) {
+    return new jQuery.prototype.init(selector);
+};
+```
 
 jQuery.prototype
 ------------------------
@@ -43,11 +45,13 @@ Next listing shows the general structure of jQuery.prototype – we define
 several properties and an important init() method presented in listing
 below:
 
-    jQuery.prototype = {
-        jquery: "0.1 Barebones Edition",
-        length: 0,
-        init: function() { /* See next listing for full code */ }
-    }
+```js
+jQuery.prototype = {
+  jquery: "0.1 Barebones Edition",
+  length: 0,
+  init: function() { /* See next listing for full code */ }
+}
+```
 
 jQuery.prototype.init() is the method called by the jQuery() function
 defined above. It is the main entry point of jQuery, which behaves
@@ -62,26 +66,28 @@ and id attributes ('\#id'). It's not difficult to add support for other
 basic selectors or integrate a full-blown selector engine like Sizzle
 too.
 
-    init: function(selector) {
-        if(typeof selector === "function") {
-            window.onload = selector;
-            this[0] = document;
+```js
+init: function(selector) {
+  if(typeof selector === "function") {
+    window.onload = selector;
+    this[0] = document;
+    this.length = 1;
+  } else if(selector) {
+      if (/^\w+$/.test(selector)) { // element name
+        selector = document.getElementsByTagName(selector);
+        return jQuery.merge(this, selector);
+      } else { // #id                        
+        var id = selector.substr(1);
+        var elem = document.getElementById(id);
+        if(elem) {
+            this[0] = elem;
             this.length = 1;
-        } else if(selector) {
-            if (/^\w+$/.test(selector)) { // element name
-                selector = document.getElementsByTagName(selector);
-                return jQuery.merge(this, selector);
-            } else { // #id                        
-                var id = selector.substr(1);
-                var elem = document.getElementById(id);
-                if(elem) {
-                        this[0] = elem;
-                        this.length = 1;
-                }
-            }
         }
-        return this;
-    }
+      }
+  }
+  return this;
+}
+```
 
 Utility methods
 -----------------------
@@ -105,20 +111,22 @@ value of element for convenience.
 
 jQuery.merge() simply combines two objects together.
 
-    jQuery.each = function(object, callback) {
-      for(var i = 0, length = object.length, value = object[0]; i < length; value = object[++i]) {
-          callback.call(value, i, value);    
-      }
-      return object;
-    }
-    jQuery.merge = function(first, second) {
-      var i = first.length, j = 0;
-      while (second[j] !== undefined) {
-        first[i++] = second[j++];
-      }
-      first.length = i;
-      return first;
-    }
+```js
+jQuery.each = function(object, callback) {
+  for(var i = 0, length = object.length, value = object[0]; i < length; value = object[++i]) {
+    callback.call(value, i, value);    
+  }
+  return object;
+}
+jQuery.merge = function(first, second) {
+  var i = first.length, j = 0;
+  while (second[j] !== undefined) {
+    first[i++] = second[j++];
+  }
+  first.length = i;
+  return first;
+}
+```
 
 Aliases
 ---------------
@@ -135,8 +143,10 @@ other hand, is a subtle but important change. It allows the
 jQuery.prototype.init() method to use all the functionality we have
 defined in jQuery.prototype.
 
-    jQuery.prototype.init.prototype = jQuery.fn = jQuery.prototype;
-    $ = jQuery;
+```js
+jQuery.prototype.init.prototype = jQuery.fn = jQuery.prototype;
+$ = jQuery;
+```
 
 Shortcuts & Prototypes
 
@@ -157,25 +167,27 @@ handling. Plug-in named bind is a general way of attaching event
 handlers, while click is a shortcut specifically for handling click
 events.
 
-    jQuery.fn.hide = function() {
-        return jQuery.each( this, function() { this.style.display = 'none'; } );
-    };
-    jQuery.fn.show = function() {
-        return jQuery.each( this, function() { this.style.display = ''; } );
-    };
-    jQuery.fn.bind = function(eventType,fn) {
-      return jQuery.each(this, function() {
-        if(this.addEventListener) {
-            this.addEventListener(eventType, fn, false);
-        } else if(this.attachEvent) {
-            this.attachEvent('on' + eventType, fn);
-        }
-          else {
-            this['on' + eventType] = fn;
-        }
-      }); 
-    };
-    jQuery.fn.click = function(fn) { return this.bind('click', fn); };
+```js
+jQuery.fn.hide = function() {
+  return jQuery.each( this, function() { this.style.display = 'none'; } );
+};
+jQuery.fn.show = function() {
+  return jQuery.each( this, function() { this.style.display = ''; } );
+};
+jQuery.fn.bind = function(eventType,fn) {
+  return jQuery.each(this, function() {
+    if(this.addEventListener) {
+        this.addEventListener(eventType, fn, false);
+    } else if(this.attachEvent) {
+        this.attachEvent('on' + eventType, fn);
+    }
+      else {
+        this['on' + eventType] = fn;
+    }
+  }); 
+};
+jQuery.fn.click = function(fn) { return this.bind('click', fn); };
+```
 
 Ideas for further exploration
 -----------------------------
